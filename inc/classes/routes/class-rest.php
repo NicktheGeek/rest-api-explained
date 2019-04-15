@@ -31,7 +31,7 @@ class Rest {
 		$namespace = 'rae/v' . $this->version;
 
 		// Base for the store routes.
-		$base = '/store/';
+		$base = '/store';
 
 		// Get Current Store.
 		register_rest_route(
@@ -42,7 +42,7 @@ class Rest {
 		);
 
 		// Get Stores By Geo.
-		$regex = 'geo/(?P<lat>[a-z0-9 .\-]+)/(?P<long>[a-z0-9 .\-]+)';
+		$regex = '/geo/(?P<lat>[a-z0-9 .\-]+)/(?P<long>[a-z0-9 .\-]+)';
 		register_rest_route(
 			$namespace, $base . $regex, array(
 				'methods'  => \WP_REST_Server::READABLE,
@@ -77,6 +77,21 @@ class Rest {
 				'callback' => array( $this, 'get_store_by_id' ),
 			)
 		);
+
+		// Alternate method for registering multiple routes with differing methods.
+		register_rest_route(
+			$namespace, $base . $regex, array(
+			// Get store by ID.
+			array(
+				'methods'  => \WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_store_by_id' ),
+			),
+			// Set current store.
+			array(
+				'methods'  => \WP_REST_Server::EDITABLE,
+				'callback' => array( $this, 'set_current_store' ),
+			)
+		) );
 	}
 
 	/**
