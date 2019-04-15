@@ -8,23 +8,6 @@
 namespace REST\API\Explained\Routes;
 
 /**
- * Gets the Shopping_List object.
- *
- * @return Shopping_List
- */
-function get_list() {
-	static $list;
-
-	if ( empty( $list ) ) {
-		$class = __NAMESPACE__ . '\\Mock_List';
-
-		$list = new $class();
-	}
-
-	return $list;
-}
-
-/**
  * Gets the Store_Locator object.
  *
  * @return Store_Locator

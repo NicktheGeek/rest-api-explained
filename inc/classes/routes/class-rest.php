@@ -24,28 +24,6 @@ class Rest {
 	public function register_routes() {
 		$version   = '1';
 		$namespace = 'rae/v' . $version;
-		$base      = 'list';
-		// Get List.
-		register_rest_route(
-			$namespace, '/' . $base, array(
-				'methods'  => \WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_list' ),
-			)
-		);
-		// Add to List.
-		register_rest_route(
-			$namespace, '/' . $base . '/(?P<sku>[a-zA-Z0-9-]+)', array(
-				'methods'  => \WP_REST_Server::CREATABLE,
-				'callback' => array( $this, 'add_to_list' ),
-			)
-		);
-		// Remove from List.
-		register_rest_route(
-			$namespace, '/' . $base . '/(?P<sku>[a-zA-Z0-9-]+)/(?P<quantity>[\d]+)', array(
-				'methods'  => \WP_REST_Server::DELETABLE,
-				'callback' => array( $this, 'remove_from_list' ),
-			)
-		);
 
 		$base = 'store';
 		// Get Current Store.
@@ -83,37 +61,6 @@ class Rest {
 				'callback' => array( $this, 'get_store_by_id' ),
 			)
 		);
-	}
-
-	/**
-	 * Gets the current shopping list.
-	 *
-	 * @return array
-	 */
-	public function get_list() {
-		return get_list()->get_list();
-	}
-
-	/**
-	 * Adds an item to the list.
-	 *
-	 * @param \WP_REST_Request $data The REST request data.
-	 *
-	 * @return bool|mixed|\WP_Error
-	 */
-	public function add_to_list( $data ) {
-		return get_list()->add_to_list( $data['sku'] );
-	}
-
-	/**
-	 * Removes one or more items from the shopping list.
-	 *
-	 * @param \WP_REST_Request $data The REST request data.
-	 *
-	 * @return bool|mixed|\WP_Error
-	 */
-	public function remove_from_list( $data ) {
-		return get_list()->remove_from_list( $data['sku'], $data['quantity'] );
 	}
 
 	/**
