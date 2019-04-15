@@ -17,15 +17,22 @@ namespace REST\API\Explained\Routes;
  * Adds custom Rest routes and controls for the shopping list and store locator functionality.
  */
 class Rest {
+	/**
+	 * Version for the API requests.
+	 *
+	 * @var int
+	 */
+	private $version = 1;
 
 	/**
 	 * Register the routes for the objects of the controller.
 	 */
 	public function register_routes() {
-		$version   = '1';
-		$namespace = 'rae/v' . $version;
+		$namespace = 'rae/v' . $this->version;
 
+		// Base for the store routes.
 		$base = '/store/';
+
 		// Get Current Store.
 		register_rest_route(
 			$namespace, $base, array(
