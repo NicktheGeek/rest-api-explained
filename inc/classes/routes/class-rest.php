@@ -60,7 +60,7 @@ class Rest {
 					'zipcode' => [
 						'validate_callback' => [ $this, 'is_zip' ],
 						'sanitize_callback' => 'absint',
-					]
+					],
 				],
 			]
 		);
@@ -87,17 +87,18 @@ class Rest {
 		// Alternate method for registering multiple routes with differing methods.
 		register_rest_route(
 			$namespace, $base . $regex, [
-			// Get store by ID.
-			[
-				'methods'  => \WP_REST_Server::READABLE,
-				'callback' => [ $this, 'get_store_by_id' ],
-			],
-			// Set current store.
-			[
-				'methods'  => \WP_REST_Server::EDITABLE,
-				'callback' => [ $this, 'set_current_store' ],
-			]
-		], true );
+				// Get store by ID.
+				[
+					'methods'  => \WP_REST_Server::READABLE,
+					'callback' => [ $this, 'get_store_by_id' ],
+				],
+				// Set current store.
+				[
+					'methods'  => \WP_REST_Server::EDITABLE,
+					'callback' => [ $this, 'set_current_store' ],
+				],
+			], true
+		);
 	}
 
 	/**
@@ -107,7 +108,7 @@ class Rest {
 	 *
 	 * @return bool
 	 */
-	function is_zip( $param ) {
+	public function is_zip( $param ) {
 		return (bool) preg_match( '#[0-9]{5}#', $param );
 	}
 
