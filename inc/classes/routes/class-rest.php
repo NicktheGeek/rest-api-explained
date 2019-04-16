@@ -35,63 +35,80 @@ class Rest {
 
 		// Get Current Store.
 		register_rest_route(
-			$namespace, $base, array(
+			$namespace, $base, [
 				'methods'  => \WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_current_store' ),
-			)
+				'callback' => [ $this, 'get_current_store' ],
+			]
 		);
 
 		// Get Stores By Geo.
 		$regex = '/geo/(?P<lat>[a-z0-9 .\-]+)/(?P<long>[a-z0-9 .\-]+)';
 		register_rest_route(
-			$namespace, $base . $regex, array(
+			$namespace, $base . $regex, [
 				'methods'  => \WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_stores_by_geo' ),
-			)
+				'callback' => [ $this, 'get_stores_by_geo' ],
+			]
 		);
 
 		// Get Stores By Zip Code.
 		$regex = '/zipcode/(?P<zipcode>[\d]+)';
 		register_rest_route(
-			$namespace, $base . $regex, array(
+			$namespace, $base . $regex, [
 				'methods'  => \WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_stores_by_zip_code' ),
-			)
+				'callback' => [ $this, 'get_stores_by_zip_code' ],
+				'args'     => [
+					'zipcode' => [
+						'validate_callback' => [ $this, 'is_zip' ],
+						'sanitize_callback' => 'absint',
+					]
+				],
+			]
 		);
 
 		// Set current store.
 		$regex = '/(?P<id>[\d]+)';
 		register_rest_route(
-			$namespace, $base . $regex, array(
+			$namespace, $base . $regex, [
 				'methods'  => \WP_REST_Server::EDITABLE,
-				'callback' => array( $this, 'set_current_store' ),
-			)
+				'callback' => [ $this, 'set_current_store' ],
+			]
 		);
 
 		// Get Store by ID.
 		// Note: This uses the same regex as the route to set the current store.
 		// The difference is the method. The prior route uses POST where this uses GET.
 		register_rest_route(
-			$namespace, $base . $regex, array(
+			$namespace, $base . $regex, [
 				'methods'  => \WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_store_by_id' ),
-			)
+				'callback' => [ $this, 'get_store_by_id' ],
+			]
 		);
 
 		// Alternate method for registering multiple routes with differing methods.
 		register_rest_route(
-			$namespace, $base . $regex, array(
+			$namespace, $base . $regex, [
 			// Get store by ID.
-			array(
+			[
 				'methods'  => \WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_store_by_id' ),
-			),
+				'callback' => [ $this, 'get_store_by_id' ],
+			],
 			// Set current store.
-			array(
+			[
 				'methods'  => \WP_REST_Server::EDITABLE,
-				'callback' => array( $this, 'set_current_store' ),
-			)
-		) );
+				'callback' => [ $this, 'set_current_store' ],
+			]
+		], true );
+	}
+
+	/**
+	 * Validates the param is a zipcode.
+	 *
+	 * @param mixed $param Parameter that should be a zipcode.
+	 *
+	 * @return bool
+	 */
+	function is_zip( $param ) {
+		return (bool) preg_match( '#[0-9]{5}#', $param );
 	}
 
 	/**

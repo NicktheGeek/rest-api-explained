@@ -288,7 +288,10 @@
 	};
 
 	wp.api.loadPromise.done( function() {
-		wp.api.init( { 'versionString' : 'rae/v1/',  'apiRoot': rest_api_explained_rest_uri } ).done( function() {
+		wp.api.init( {
+			versionString: 'rae/v1/',
+			apiRoot: rest_api_explained_rest_uri
+		} ).done( function() {
 			RAE_Locator.init();
 		} );
 	} );

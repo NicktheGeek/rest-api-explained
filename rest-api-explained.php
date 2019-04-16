@@ -52,3 +52,23 @@ function rest_api_explained_init() {
 	echo '</code></pre>';
 }
 add_action( 'init', 'rest_api_explained_init' );
+
+/**
+ * Enqueues and localizes the RAE script.
+ */
+function rest_api_explained_enqueue() {
+	wp_enqueue_script(
+		'rest-api-explained-script',
+		plugin_dir_url( __FILE__ ) . '/assets/src/js/locator.js',
+		array( 'jquery', 'wp-api' ),
+		'0.0.1',
+		true
+	);
+
+	wp_localize_script(
+		'rest-api-explained-script',
+		'rest_api_explained_rest_uri',
+		esc_url( trailingslashit( get_site_url() ) . 'wp-json/' )
+	);
+}
+add_action( 'wp_enqueue_scripts', 'rest_api_explained_enqueue' );
